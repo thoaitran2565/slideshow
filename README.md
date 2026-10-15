@@ -68,13 +68,13 @@ Sau khi PyInstaller hoàn tất, file thực thi sẽ được tạo ra tại:
 ```text
 PhotoViewerApp/
 └── dist/
-    └── main.exe       <-- File chạy ứng dụng
+    └── Slideshow.exe       <-- File chạy ứng dụng
 ```
 
 ### Bước 4.3: Cách sử dụng file `.exe`
-1. Copy file `main.exe` trong thư mục `dist` ra thư mục bạn muốn đặt ứng dụng.
-2. Tạo hoặc copy thư mục `images` chứa ảnh nằm **cùng cấp** với file `main.exe`.
-3. Nhấp đôi chuột vào `main.exe` để khởi chạy phần mềm.
+1. Copy file `Slideshow.exe` trong thư mục `dist` ra thư mục bạn muốn đặt ứng dụng.
+2. Copy file app_icon.ico vào thư mục dist nếu chưa có.
+3. Nhấp đôi chuột vào `Slideshow.exe` để khởi chạy phần mềm.
 
 ---
 
