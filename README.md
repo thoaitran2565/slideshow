@@ -1,137 +1,228 @@
-# Hướng Dẫn Cài Đặt, Chạy Và Đóng Gói Ứng Dụng Trình Chiếu Ảnh
+# 🖼️ PhotoViewerApp — Ứng Dụng Trình Chiếu Ảnh
 
-Tài liệu này hướng dẫn từng bước cách thiết lập môi trường, chạy mã nguồn, sử dụng phần mềm và đóng gói thành file thực thi `.exe` trên Windows bằng **VS Code**.
+Ứng dụng trình chiếu ảnh trên Windows, được xây dựng bằng **Python** và **PyQt6**. Tài liệu này hướng dẫn cài đặt môi trường, chạy ứng dụng, đóng gói thành tệp `.exe` và đăng ký mở ảnh bằng Windows.
 
 ---
 
-## 1. Cấu Trúc Thư Mục Dự Án
+## 📚 Mục lục
 
-Đảm bảo thư mục dự án của bạn có cấu trúc như sau:
+- [✨ Tính năng](#-tính-năng)
+- [📁 Cấu trúc dự án](#-cấu-trúc-dự-án)
+- [⚙️ Yêu cầu](#️-yêu-cầu)
+- [🚀 Cài đặt và chạy](#-cài-đặt-và-chạy)
+- [📦 Đóng gói thành EXE](#-đóng-gói-thành-exe)
+- [🎮 Hướng dẫn sử dụng](#-hướng-dẫn-sử-dụng)
+- [🪟 Đăng ký Open with trên Windows](#-đăng-ký-open-with-trên-windows)
+- [🛠️ Khắc phục sự cố](#️-khắc-phục-sự-cố)
+
+## ✨ Tính năng
+
+- Trình chiếu ảnh và chuyển ảnh trước/sau.
+- Phóng to, thu nhỏ và kéo ảnh khi đang zoom.
+- Chuyển đổi chế độ toàn màn hình.
+- Tạm dừng hoặc tiếp tục trình chiếu tự động.
+- Tùy chỉnh màu nền hiển thị.
+- Sao chép đường dẫn, mở vị trí tệp ảnh và xoay ảnh 90° sang phải.
+- Đưa ảnh vào Thùng rác Windows bằng `send2trash`.
+- Đóng gói ứng dụng thành tệp thực thi `.exe`.
+
+## 📁 Cấu trúc dự án
 
 ```text
 PhotoViewerApp/
-├── images/             <-- Chứa các file ảnh (.jpg, .png, .webp,...)
+├── images/             # Thư mục chứa ảnh trình chiếu
 │   ├── sample1.jpg
 │   └── sample2.png
-├── main.py             <-- File mã nguồn chính
-└── README.md           <-- File hướng dẫn này
+├── main.py             # Mã nguồn chính
+├── app_icon.ico        # Biểu tượng ứng dụng (tùy chọn khi build)
+└── README.md           # Tài liệu hướng dẫn
 ```
 
----
+> **Lưu ý:** Kiểm tra mã nguồn để xác nhận ứng dụng đọc ảnh từ `images/` hay từ đường dẫn được truyền vào khi khởi chạy.
 
-## 2. Cài Đặt Thư Viện Cần Thiết
+## ⚙️ Yêu cầu
 
-Mở **Terminal** trong VS Code (`Ctrl + ~`) hoặc `Command Prompt` / `PowerShell` tại thư mục dự án và thực hiện các lệnh sau:
+- Windows
+- Python đã cài đặt và có thể gọi bằng lệnh `python`
+- Visual Studio Code (khuyến nghị)
+- Kết nối Internet khi cài thư viện
 
-### Bước 2.1: Cài đặt các thư viện bổ trợ cho ứng dụng
+## 🚀 Cài đặt và chạy
+
+### 1. Mở dự án
+
+Mở thư mục `PhotoViewerApp/` bằng VS Code, sau đó mở Terminal bằng **Ctrl + `**.
+
+### 2. Cài đặt thư viện
+
+Chạy các lệnh sau trong Terminal:
+
 ```bash
-pip install PyQt6 send2trash
-```
-
-* **`PyQt6`**: Thư viện đồ họa tạo giao diện ứng dụng.
-* **`send2trash`**: Thư viện hỗ trợ xóa ảnh an toàn vào Thùng rác Windows.
-
-### Bước 2.2: Cài đặt công cụ đóng gói file .exe
-```bash
+python -m pip install PyQt6 send2trash
 python -m pip install pyinstaller
 ```
 
----
+| Thư viện | Vai trò |
+|---|---|
+| `PyQt6` | Xây dựng giao diện đồ họa |
+| `send2trash` | Đưa tệp vào Thùng rác thay vì xóa vĩnh viễn |
+| `PyInstaller` | Đóng gói chương trình Python thành tệp thực thi |
 
-## 3. Cách Chạy Ứng Dụng Từ Mã Nguồn (VS Code)
+### 3. Chạy ứng dụng từ mã nguồn
 
-1. Copy tất cả các ảnh bạn muốn trình chiếu vào thư mục `images/`.
-2. Mở file `main.py` trong VS Code.
-3. Chạy lệnh sau trong Terminal để bắt đầu trình chiếu:
-   ```bash
-   python main.py
-   ```
+```bash
+python main.py
+```
 
----
+Nếu mã nguồn hỗ trợ tham số đường dẫn ảnh, bạn có thể chạy theo mẫu:
 
-## 4. Cách Đóng Gói Thành File `.exe` Chạy Độc Lập
+```bash
+python main.py "C:\Users\TenUser\Pictures\anh_test.jpg"
+```
 
-Đóng gói ứng dụng giúp bạn có thể chạy phần mềm trên bất kỳ máy tính Windows nào mà **không cần cài đặt Python**.
+Thay đường dẫn ví dụ bằng đường dẫn ảnh thực tế trên máy tính.
 
-### Bước 4.1: Chạy lệnh đóng gói
-Trong Terminal của VS Code, chạy lệnh:
+## 📦 Đóng gói thành EXE
+
+Mở Terminal tại thư mục chứa `main.py`.
+
+### Cách 1: Đóng gói với tên mặc định
+
 ```bash
 python -m PyInstaller --noconsole --onefile main.py
+```
+
+### Cách 2: Đóng gói thành `Slideshow.exe` kèm biểu tượng
+
+Đặt tệp `app_icon.ico` cạnh `main.py`, sau đó chạy:
+
+```bash
 python -m PyInstaller --noconsole --onefile --name Slideshow --icon=app_icon.ico main.py
 ```
 
-* `--noconsole`: Ẩn màn hình đen CMD khi ứng dụng khởi chạy.
-* `--onefile`: Đóng gói tất cả thành 1 file `.exe` duy nhất.
+**Ý nghĩa tham số:**
 
-### Bước 4.2: Vị trí file sau khi build
-Sau khi PyInstaller hoàn tất, file thực thi sẽ được tạo ra tại:
+| Tham số | Ý nghĩa |
+|---|---|
+| `--noconsole` | Không hiện cửa sổ console khi khởi chạy ứng dụng GUI |
+| `--onefile` | Đóng gói thành một tệp thực thi duy nhất |
+| `--name Slideshow` | Đặt tên tệp đầu ra là `Slideshow.exe` |
+| `--icon=app_icon.ico` | Đặt biểu tượng cho tệp EXE |
+
+Sau khi build thành công, tệp thường nằm tại:
+
 ```text
 PhotoViewerApp/
-└── dist/
-    └── Slideshow.exe       <-- File chạy ứng dụng
+├── build/
+├── dist/
+│   └── Slideshow.exe
+└── Slideshow.spec
 ```
 
-### Bước 4.3: Cách sử dụng file `.exe`
-1. Copy file `Slideshow.exe` trong thư mục `dist` ra thư mục bạn muốn đặt ứng dụng.
-2. Copy file app_icon.ico vào thư mục dist nếu chưa có.
-3. Nhấp đôi chuột vào `Slideshow.exe` để khởi chạy phần mềm.
+### Chạy ứng dụng đã đóng gói
+
+1. Mở thư mục `dist/`.
+2. Chạy `Slideshow.exe`.
+3. Nếu ứng dụng cần thư mục ảnh đi kèm, hãy đặt thư mục đó đúng vị trí mà mã nguồn mong đợi.
+
+> **Lưu ý:** `--onefile` đóng gói chương trình và các thư viện phụ thuộc vào một EXE, nhưng không tự động bảo đảm các ảnh bên ngoài hoặc tài nguyên tùy chỉnh được đóng gói. Hãy kiểm tra ứng dụng trên máy đích trước khi phân phối.
+
+## 🎮 Hướng dẫn sử dụng
+
+### Thao tác bằng chuột
+
+| Thao tác | Chức năng |
+|---|---|
+| Nhấp đúp chuột | Bật/tắt chế độ toàn màn hình |
+| Cuộn con lăn | Phóng to/thu nhỏ ảnh |
+| Giữ và kéo chuột | Di chuyển ảnh khi đang phóng to |
+
+### Phím tắt
+
+| Phím | Chức năng |
+|---|---|
+| `←` | Xem ảnh trước |
+| `→` | Xem ảnh tiếp theo |
+| `Space` | Tạm dừng/tiếp tục trình chiếu tự động |
+| `F11` | Bật/tắt toàn màn hình |
+| `Esc` | Thoát chế độ toàn màn hình |
+
+### Bảng điều khiển
+
+- **Prev / Next:** chuyển ảnh thủ công.
+- **Background:** thay đổi màu nền khu vực không được ảnh lấp đầy.
+- **Options:**
+  - **Copy Tệp Ảnh:** sao chép đường dẫn tệp ảnh.
+  - **Mở Trong Thư Mục:** mở File Explorer và chọn ảnh hiện tại.
+  - **Xoay Phải 90°:** xoay ảnh đang xem.
+  - **Xóa Ảnh:** đưa ảnh vào Thùng rác Windows.
+
+Tên nút và hành vi thực tế có thể khác tùy phiên bản mã nguồn.
+
+## 🪟 Đăng ký “Open with” trên Windows
+
+Thiết lập này giúp Windows hiển thị ứng dụng trong danh sách **Open with (Mở bằng)** cho các định dạng ảnh được đăng ký.
+
+> **Cảnh báo:** Tệp `.reg` chỉnh sửa Windows Registry. Chỉ chạy tệp bạn đã kiểm tra. Đường dẫn EXE phải khớp với vị trí thực tế trên máy.
+
+### 1. Xác định đường dẫn EXE
+
+Ví dụ:
+
+```text
+D:\Code\apps\slideshow_app\dist\Slideshow.exe
+```
+
+Nếu EXE nằm ở vị trí khác, hãy thay đường dẫn trong nội dung bên dưới.
+
+### 2. Tạo tệp `setup_assoc.reg`
+
+Mở Notepad, dán nội dung sau và sửa đường dẫn EXE nếu cần:
+
+```reg
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\Software\Classes\Applications\Slideshow.exe\shell\open\command]
+@="\"D:\\Code\\apps\\slideshow_app\\dist\\Slideshow.exe\" \"%1\""
+
+[HKEY_CURRENT_USER\Software\Classes\.jpg\OpenWithList\Slideshow.exe]
+
+[HKEY_CURRENT_USER\Software\Classes\.jpeg\OpenWithList\Slideshow.exe]
+
+[HKEY_CURRENT_USER\Software\Classes\.png\OpenWithList\Slideshow.exe]
+
+[HKEY_CURRENT_USER\Software\Classes\.bmp\OpenWithList\Slideshow.exe]
+
+[HKEY_CURRENT_USER\Software\Classes\.webp\OpenWithList\Slideshow.exe]
+```
+
+Lưu tệp với tên **`setup_assoc.reg`**. Trong hộp thoại Save As, chọn **Save as type: All Files** để tránh bị lưu thành `setup_assoc.reg.txt`.
+
+### 3. Thêm đăng ký vào Windows
+
+1. Nhấp đúp `setup_assoc.reg`.
+2. Kiểm tra thông báo, sau đó xác nhận để thêm thông tin vào Registry.
+3. Nhấp chuột phải vào tệp ảnh → **Open with** → chọn `Slideshow.exe`.
+
+Nếu ứng dụng không mở đúng ảnh được chọn, hãy xác nhận `main.py` có xử lý tham số đường dẫn ảnh (`%1`) hay không. Việc đăng ký “Open with” không tự bổ sung khả năng này vào mã nguồn.
+
+## 🛠️ Khắc phục sự cố
+
+- **Không nhận diện lệnh `python`:** cài Python và bật tùy chọn thêm Python vào `PATH`, sau đó mở lại Terminal.
+- **Thiếu thư viện:** chạy lại `python -m pip install PyQt6 send2trash`.
+- **Không tạo được EXE:** kiểm tra lỗi trong Terminal và xác nhận PyInstaller đã cài bằng `python -m pip show pyinstaller`.
+- **EXE không có biểu tượng:** kiểm tra tệp `app_icon.ico` tồn tại và dùng lệnh build có `--icon=app_icon.ico`.
+- **Mở ảnh bằng tham số không hoạt động:** kiểm tra mã nguồn có đọc đối số dòng lệnh hay không.
+- **EXE không tìm thấy ảnh:** kiểm tra vị trí thư mục ảnh và cách ứng dụng xác định thư mục làm việc.
 
 ---
 
-## 5. Hướng Dẫn Sử Dụng & Phím Tắt
+## 📄 Giấy phép
 
-### Thao tác bằng chuột
-* **Double Click (Nhấp đôi chuột)**: Bật / Tắt chế độ Fullscreen (Toàn màn hình).
-* **Cuộn chuột (Mouse Wheel)**: Ph phóng to / Thu nhỏ ảnh.
-* **Kéo giữ chuột (Drag & Drop)**: Di chuyển vị trí ảnh khi đang zoom.
+Tài liệu nguồn chưa nêu giấy phép của dự án. Nếu dự định công khai hoặc phân phối dự án, hãy bổ sung giấy phép phù hợp.
 
-### Bàn phím & Phím tắt
-* **`Mũi tên Trái (◄)`**: Quay lại ảnh trước (Prev).
-* **`Mũi tên Phải (►)`**: Chuyển sang ảnh tiếp theo (Next).
-* **`Phím Cách (Spacebar)`**: Dừng / Tiếp tục trình chiếu tự động (Pause/Play).
-* **`F11`**: Bật / Tắt chế độ Fullscreen.
-* **`Esc`**: Thoát khỏi chế độ Fullscreen.
+---
 
-### Bảng điều khiển (Control Panel)
-* **◄ Prev / Next ►**: Chuyển ảnh thủ công mà không ảnh hưởng đến bộ đếm thời gian tự động.
-* **🎨 Background**: Chọn màu nền tùy thích cho phần khung hình bị thừa khi tỷ lệ ảnh không lấp đầy màn hình.
-* **⚙ Options**: 
-  * *Copy Tệp Ảnh*: Copy đường dẫn file.
-  * *Mở Trong Thư Mục*: Mở Windows Explorer và chọn trực tiếp file ảnh hiện tại.
-  * *Xoay Phải 90°*: Xoay ảnh đang xem.
-  * *Xóa Ảnh*: Đưa ảnh hiện tại vào Thùng rác an toàn.
-
-
-## Đăng Ký "Open With" Với Windows (Mở Ảnh Trực Tiếp)
-
-Để có thể bấm chuột phải vào bất kỳ file ảnh nào trên máy tính $\rightarrow$ chọn **Open with** $\rightarrow$ chọn ứng dụng của bạn để mở và trình chiếu ngay lập tức, hãy làm theo các bước sau:
-
-1. Đảm bảo file `Slideshow.exe` của bạn nằm đúng tại đường dẫn: 
-   `D:\Code\apps\slideshow_app\dist\Slideshow.exe` *(nếu đường dẫn của bạn khác, hãy mở file `.reg` ở bước 2 và sửa lại cho khớp với thực tế)*.
-2. Tạo một file văn bản mới ngoài thư mục dự án và đặt tên là **`setup_assoc.reg`** với nội dung sau:
-   ```text
-   Windows Registry Editor Version 5.00
-
-   [HKEY_CURRENT_USER\Software\Classes\.jpg]
-   @="SlideshowApp.Image"
-
-   [HKEY_CURRENT_USER\Software\Classes\.jpeg]
-   @="SlideshowApp.Image"
-
-   [HKEY_CURRENT_USER\Software\Classes\.png]
-   @="SlideshowApp.Image"
-
-   [HKEY_CURRENT_USER\Software\Classes\.bmp]
-   @="SlideshowApp.Image"
-
-   [HKEY_CURRENT_USER\Software\Classes\.webp]
-   @="SlideshowApp.Image"
-
-   [HKEY_CURRENT_USER\Software\Classes\SlideshowApp.Image]
-   @="Trình Chiếu Ảnh Cá Nhân"
-
-   [HKEY_CURRENT_USER\Software\Classes\SlideshowApp.Image\shell\open\command]
-   @="\"D:\\Code\\apps\\slideshow_app\\dist\\Slideshow.exe\" \"%1\""
-
-Bấm đúp chuột vào file setup_assoc.reg vừa tạo $\rightarrow$ chọn Yes / Continue để Windows thêm thông tin vào Registry.Từ bây giờ, bạn có thể nhấp chuột phải vào file ảnh bất kỳ, chọn Open with để phần mềm mở lên và trình chiếu chính bức ảnh đó!
-Test open with file: python main.py "C:\Users\TenUser\Pictures\anh_test.jpg"
+<p align="center">
+  <i>PhotoViewerApp — đơn giản hóa trải nghiệm trình chiếu ảnh trên Windows.</i>
+</p>
