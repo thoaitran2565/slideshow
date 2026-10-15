@@ -100,3 +100,38 @@ PhotoViewerApp/
   * *Mở Trong Thư Mục*: Mở Windows Explorer và chọn trực tiếp file ảnh hiện tại.
   * *Xoay Phải 90°*: Xoay ảnh đang xem.
   * *Xóa Ảnh*: Đưa ảnh hiện tại vào Thùng rác an toàn.
+
+
+## Đăng Ký "Open With" Với Windows (Mở Ảnh Trực Tiếp)
+
+Để có thể bấm chuột phải vào bất kỳ file ảnh nào trên máy tính $\rightarrow$ chọn **Open with** $\rightarrow$ chọn ứng dụng của bạn để mở và trình chiếu ngay lập tức, hãy làm theo các bước sau:
+
+1. Đảm bảo file `Slideshow.exe` của bạn nằm đúng tại đường dẫn: 
+   `D:\Code\apps\slideshow_app\dist\Slideshow.exe` *(nếu đường dẫn của bạn khác, hãy mở file `.reg` ở bước 2 và sửa lại cho khớp với thực tế)*.
+2. Tạo một file văn bản mới ngoài thư mục dự án và đặt tên là **`setup_assoc.reg`** với nội dung sau:
+   ```text
+   Windows Registry Editor Version 5.00
+
+   [HKEY_CURRENT_USER\Software\Classes\.jpg]
+   @="SlideshowApp.Image"
+
+   [HKEY_CURRENT_USER\Software\Classes\.jpeg]
+   @="SlideshowApp.Image"
+
+   [HKEY_CURRENT_USER\Software\Classes\.png]
+   @="SlideshowApp.Image"
+
+   [HKEY_CURRENT_USER\Software\Classes\.bmp]
+   @="SlideshowApp.Image"
+
+   [HKEY_CURRENT_USER\Software\Classes\.webp]
+   @="SlideshowApp.Image"
+
+   [HKEY_CURRENT_USER\Software\Classes\SlideshowApp.Image]
+   @="Trình Chiếu Ảnh Cá Nhân"
+
+   [HKEY_CURRENT_USER\Software\Classes\SlideshowApp.Image\shell\open\command]
+   @="\"D:\\Code\\apps\\slideshow_app\\dist\\Slideshow.exe\" \"%1\""
+
+Bấm đúp chuột vào file setup_assoc.reg vừa tạo $\rightarrow$ chọn Yes / Continue để Windows thêm thông tin vào Registry.Từ bây giờ, bạn có thể nhấp chuột phải vào file ảnh bất kỳ, chọn Open with để phần mềm mở lên và trình chiếu chính bức ảnh đó!
+Test open with file: python main.py "C:\Users\TenUser\Pictures\anh_test.jpg"

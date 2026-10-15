@@ -14,7 +14,7 @@ from src.settings_dialog import SettingsDialog
 
 
 class PhotoViewerWindow(QMainWindow):
-    def __init__(self, image_dir="images"):
+    def __init__(self, image_dir="images", start_file=None):
         super().__init__()
         
         # Load cấu hình đã lưu
@@ -24,13 +24,17 @@ class PhotoViewerWindow(QMainWindow):
         self.current_folder = self.settings.get("image_folder", image_dir)
         self.image_manager = ImageManager(image_dir=self.current_folder)
         
+        # Nạp danh sách và khóa thẳng index vào file được chọn
+        self.image_manager.load_images(start_file=start_file)
+        
         self.interval_ms = self.settings.get("interval_ms", 3000)
         self.bg_color = QColor(self.settings.get("bg_color", "#000000"))
         
+        # Bật sẵn chế độ tự động trình chiếu khi mở từ bên ngoài
         self.is_playing = True
 
         self.init_ui()
-        self.reload_and_show()
+        self.show_image()  # Hiển thị trực tiếp ảnh đúng vị trí
 
         # Timer trình chiếu tự động
         self.timer = QTimer(self)

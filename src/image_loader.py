@@ -1,6 +1,7 @@
 import os
 import glob
 import random
+import re
 from send2trash import send2trash
 from src.config import SUPPORTED_EXTENSIONS
 
@@ -11,9 +12,13 @@ class ImageManager:
         self.image_paths = []
         self.current_index = 0
         self.is_random = False
-        self.history = []  # Lưu lịch sử chuyển ảnh khi ở chế độ Random
+        self.history = []
 
-    def load_images(self):
+    def _natural_sort_key(self, s):
+        """Hàm hỗ trợ sắp xếp tên file theo kiểu tự nhiên của Windows (ví dụ: 2.jpg đứng trước 10.jpg)"""
+        return [int(text) if text.isdigit() else text.lower() for text in re.split(r'(\d+)', s)]
+
+    def load_images(self, start_file=None):
         abs_path = os.path.abspath(self.image_dir)
         if not os.path.exists(abs_path):
             os.makedirs(abs_path)
@@ -23,8 +28,26 @@ class ImageManager:
             paths.extend(glob.glob(os.path.join(abs_path, ext)))
             paths.extend(glob.glob(os.path.join(abs_path, ext.upper())))
 
-        self.image_paths = sorted(list(set(paths)))
-        if self.image_paths and self.current_index >= len(self.image_paths):
+        # Sắp xếp danh sách file theo tên tự nhiên (giống hệt cách Explorer sắp xếp mặc định)
+        self.image_paths = sorted(list(set(paths)), key=lambda x: self._natural_sort_key(os.path.basename(x)))
+        
+        # Nếu có file chỉ định mở trực tiếp từ "Open with"
+        if start_file:
+            norm_start = os.path.normpath(start_file)
+            matched_index = -1
+            for idx, path in enumerate(self.image_paths):
+                if os.path.normpath(path) == norm_start:
+                    matched_index = idx
+                    break
+            
+            if matched_index != -1:
+                self.current_index = matched_index
+            else:
+                # Trường hợp file nằm ngoài danh sách quét, chèn thủ công vào để hiển thị
+                if os.path.exists(norm_start):
+                    self.image_paths.insert(0, norm_start)
+                    self.current_index = 0
+        elif self.image_paths and self.current_index >= len(self.image_paths):
             self.current_index = 0
 
         return len(self.image_paths)
@@ -40,7 +63,6 @@ class ImageManager:
         path = self.get_current_path()
         filename = os.path.basename(path) if path else ""
         
-        # Nếu bật Random, không hiển thị số thứ tự (ví dụ: 1/10)
         if self.is_random:
             return f"🔀 Random - {filename}"
         return f"{self.current_index + 1} / {len(self.image_paths)} - {filename}"

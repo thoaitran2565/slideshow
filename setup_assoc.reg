@@ -1,0 +1,22 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\Software\Classes\.jpg]
+@="SlideshowApp.Image"
+
+[HKEY_CURRENT_USER\Software\Classes\.jpeg]
+@="SlideshowApp.Image"
+
+[HKEY_CURRENT_USER\Software\Classes\.png]
+@="SlideshowApp.Image"
+
+[HKEY_CURRENT_USER\Software\Classes\.bmp]
+@="SlideshowApp.Image"
+
+[HKEY_CURRENT_USER\Software\Classes\.webp]
+@="SlideshowApp.Image"
+
+[HKEY_CURRENT_USER\Software\Classes\SlideshowApp.Image]
+@="Trình Chiếu Ảnh Cá Nhân"
+
+[HKEY_CURRENT_USER\Software\Classes\SlideshowApp.Image\shell\open\command]
+@="\"D:\\Code\\apps\\slideshow_app\\dist\\Slideshow.exe\" \"%1\""
