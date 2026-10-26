@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QSplashScreen, QVBoxLayout, QLabel, QProgressBar
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QPoint
 from PyQt6.QtGui import QPixmap, QColor, QFont
 
 
@@ -52,3 +52,16 @@ class CustomSplashScreen(QSplashScreen):
         self.progress.setValue(value)
         if message:
             self.lbl_status.setText(message)
+
+    def move_to_screen_center(self, app, saved_geometry):
+        """Định vị splash screen ra đúng màn hình chứa tọa độ ứng dụng lần trước"""
+        if saved_geometry and len(saved_geometry) == 4:
+            center_x = saved_geometry[0] + saved_geometry[2] // 2
+            center_y = saved_geometry[1] + saved_geometry[3] // 2
+            
+            screen = app.screenAt(QPoint(center_x, center_y))
+            if screen:
+                screen_geo = screen.geometry()
+                splash_x = screen_geo.x() + (screen_geo.width() - self.width()) // 2
+                splash_y = screen_geo.y() + (screen_geo.height() - self.height()) // 2
+                self.move(splash_x, splash_y)

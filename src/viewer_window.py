@@ -34,6 +34,19 @@ class PhotoViewerWindow(QMainWindow):
         self.is_playing = True
 
         self.init_ui()
+        # --- KHÔI PHỤC VỊ TRÍ VÀ TRẠNG THÁI CỬA SỔ CŨ ---
+        saved_geometry = self.settings.get("window_geometry")
+        if saved_geometry and len(saved_geometry) == 4:
+            # Đặt tọa độ kích thước khung bình thường trước
+            self.setGeometry(saved_geometry[0], saved_geometry[1], saved_geometry[2], saved_geometry[3])
+            
+        # Sau đó mới set trạng thái phóng to (nếu có)
+        if self.settings.get("is_maximized", False):
+            self.showMaximized()
+        elif self.settings.get("is_fullscreen", False):
+            self.showFullScreen()
+        # ---------------------------------------------
+
         self.show_image()  # Hiển thị trực tiếp ảnh đúng vị trí
 
         # Timer trình chiếu tự động
@@ -502,3 +515,15 @@ class PhotoViewerWindow(QMainWindow):
 
         # Cập nhật lại giao diện nút ngay lập tức
         self.update_favorite_button_state()
+
+    def closeEvent(self, event):
+        """Lưu lại vị trí, kích thước và trạng thái hiển thị trước khi tắt app"""
+        # Lưu lại tọa độ ở trạng thái bình thường (kể cả khi đang maximize/fullscreen)
+        normal_geo = self.normalGeometry()
+        self.settings["window_geometry"] = [normal_geo.x(), normal_geo.y(), normal_geo.width(), normal_geo.height()]
+        
+        self.settings["is_maximized"] = self.isMaximized()
+        self.settings["is_fullscreen"] = self.isFullScreen()
+        
+        save_settings(self.settings)
+        event.accept()

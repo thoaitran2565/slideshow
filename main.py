@@ -2,12 +2,14 @@ import sys
 import time
 import os
 from PyQt6.QtWidgets import QApplication, QDialog
+from PyQt6.QtCore import QPoint
 from src.viewer_window import PhotoViewerWindow
 from src.splash_screen import CustomSplashScreen
 from src.settings_dialog import SettingsDialog
 import winreg as reg
 from src.config import load_settings
 import ctypes
+
 myappid = 'mycompany.myproduct.subproduct.version' # Chuỗi id bất kỳ
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
@@ -24,8 +26,14 @@ def main():
         from PyQt6.QtGui import QIcon
         app.setWindowIcon(QIcon("app_icon.png"))
 
-    # 1. Loading Screen
+    settings = load_settings()
+
+    # 1. Loading Screen (Kèm logic đưa ra đúng màn hình phụ nếu lần trước app nằm ở đó)
     splash = CustomSplashScreen()
+    saved_geometry = settings.get("window_geometry")
+    if hasattr(splash, "move_to_screen_center"):
+        splash.move_to_screen_center(app, saved_geometry)
+    
     splash.show()
     app.processEvents()
 
@@ -49,7 +57,6 @@ def main():
             initial_dir = os.path.dirname(file_path)
 
     # 2. Kiểm tra thư mục lần đầu chạy (nếu không mở qua Open with và chưa có cấu hình thư mục)
-    settings = load_settings()
     folder = initial_dir or settings.get("image_folder", "")
 
     if not folder or not os.path.exists(folder):
