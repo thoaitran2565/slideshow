@@ -1,11 +1,12 @@
 {
-    "interval_ms": 5000,
+    "image_folder": "D:/Ảnh/Ảnh đã tải",
+    "interval_ms": 8000,
     "bg_color": "#000000",
-    "image_folder": "D:/\u1ea2nh/\u1ea2nh \u0111\u00e3 t\u1ea3i",
     "favorites": [
-        "D:\\\u1ea2nh\\\u1ea2nh \u0111\u00e3 t\u1ea3i\\9407.jpg",
-        "D:\\\u1ea2nh\\\u1ea2nh \u0111\u00e3 t\u1ea3i\\22831.jpg",
-        "D:\\\u1ea2nh\\\u1ea2nh \u0111\u00e3 t\u1ea3i\\12792.jpg"
+        "D:\\Ảnh\\Ảnh đã tải\\9407.jpg",
+        "D:\\Ảnh\\Ảnh đã tải\\22831.jpg",
+        "D:\\Ảnh\\Ảnh đã tải\\12792.jpg",
+        "D:\\Ảnh\\Ảnh đã tải\\20749.jpg"
     ],
     "is_maximized": false,
     "is_fullscreen": false,
@@ -13,6 +14,14 @@
         332,
         150,
         1278,
-        647
-    ]
+        741
+    ],
+    "is_random": true,
+    "show_control_panel": true,
+    "bgm_enabled": true,
+    "bgm_source": "youtube",
+    "bgm_youtube_url": "https://www.youtube.com/watch?v=jfKfPfyJRdk",
+    "bgm_volume": 85,
+    "bgm_loop": true,
+    "transition_type": "fade"
 }
